@@ -4,177 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>英作文マスター50選</title>
-    <style>
-        body {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            background-color: #f0f2f5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            color: #333;
-        }
-        .container {
-            background-color: white;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            width: 95%;
-            max-width: 700px;
-            text-align: center;
-        }
-        h1 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: #2c3e50;
-        }
-        
-        /* 設定メニューのスタイル */
-        .menu-section {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-bottom: 1.5rem;
-            text-align: left;
-            background: #f8f9fa;
-            padding: 1.5rem;
-            border-radius: 10px;
-            border: 1px solid #eee;
-        }
-        .menu-group {
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 15px;
-        }
-        .menu-group:last-child {
-            border-bottom: none;
-            padding-bottom: 0;
-        }
-        .menu-label {
-            font-weight: bold;
-            display: block;
-            margin-bottom: 10px;
-            color: #2c3e50;
-        }
-        .radio-options {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-        .radio-options label {
-            cursor: pointer;
-            background: white;
-            padding: 6px 12px;
-            border-radius: 20px;
-            border: 1px solid #ddd;
-            transition: all 0.2s;
-        }
-        .radio-options label:hover {
-            background: #e9ecef;
-        }
-        .radio-options input:checked + span {
-            font-weight: bold;
-            color: #3498db;
-        }
-
-        /* ゲーム画面のスタイル */
-        .progress {
-            margin-bottom: 1rem;
-            color: #7f8c8d;
-            font-size: 0.9rem;
-        }
-        .japanese-text {
-            font-size: 1.25rem;
-            font-weight: bold;
-            margin-bottom: 1.5rem;
-            padding: 1rem;
-            background-color: #e8f4f8;
-            border-radius: 8px;
-            color: #2980b9;
-            line-height: 1.4;
-        }
-        textarea {
-            width: 100%;
-            padding: 12px;
-            font-size: 1.1rem;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            box-sizing: border-box;
-            resize: vertical;
-            min-height: 80px;
-            font-family: inherit;
-            margin-bottom: 1rem;
-        }
-        textarea:focus {
-            border-color: #3498db;
-            outline: none;
-        }
-        button {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            font-size: 1rem;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            min-width: 120px;
-        }
-        button:hover {
-            background-color: #2980b9;
-        }
-        button:disabled {
-            background-color: #bdc3c7;
-            cursor: not-allowed;
-        }
-
-        /* 結果表示エリア */
-        .result-area {
-            margin-top: 1.5rem;
-            text-align: left;
-            padding: 1.5rem;
-            border-radius: 8px;
-            display: none;
-            background-color: #fafafa;
-            border: 1px solid #eee;
-        }
-        .result-title {
-            margin-top: 0;
-            margin-bottom: 1rem;
-            font-size: 1.2rem;
-            font-weight: bold;
-        }
-        .result-title.correct { color: #27ae60; }
-        .result-title.wrong { color: #c0392b; }
-
-        .diff-removed {
-            background-color: #f8d7da;
-            color: #721c24;
-            text-decoration: line-through;
-            padding: 2px 4px;
-            border-radius: 3px;
-        }
-        .diff-added {
-            background-color: #d4edda;
-            color: #155724;
-            font-weight: bold;
-            padding: 2px 4px;
-            border-radius: 3px;
-        }
-        .diff-common { color: #333; }
-        
-        .full-answer-box {
-            margin-top: 1rem;
-            font-size: 0.9rem;
-            color: #666;
-            border-top: 1px solid #ddd;
-            padding-top: 0.5rem;
-        }
-
-        .hidden { display: none; }
-        .fade-in { animation: fadeIn 0.5s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -186,8 +16,8 @@
             <div class="menu-group">
                 <span class="menu-label">1. 出題順を選択:</span>
                 <div class="radio-options">
-                    <label><input type="radio" name="order" value="seq" checked onchange="toggleMenu()"> <span>順番通り (Sequential)</span></label>
-                    <label><input type="radio" name="order" value="rand" onchange="toggleMenu()"> <span>ランダム (Random)</span></label>
+                    <label><input type="radio" name="order" value="seq" checked onchange="toggleMenu()"> <span>順番通り</span></label>
+                    <label><input type="radio" name="order" value="rand" onchange="toggleMenu()"> <span>ランダム</span></label>
                 </div>
             </div>
 
@@ -219,18 +49,18 @@
     <div id="game-screen" class="hidden">
         <div class="progress" id="progress"></div>
         <div class="japanese-text" id="question-text"></div>
-        <textarea id="user-input" placeholder="英文を入力してください..."></textarea>
+        <textarea id="user-input" placeholder="ここに英文を入力してください..."></textarea>
         <br>
         <button id="action-btn" onclick="checkAnswer()">回答する</button>
 
         <div id="result-display" class="result-area">
             <div id="result-title" class="result-title"></div>
             
-            <div style="margin-bottom: 5px;"><strong>あなたの回答の添削:</strong></div>
-            <div id="diff-output" style="line-height: 1.8; font-size: 1.1rem;"></div>
+            <div style="margin-bottom: 8px;"><strong>あなたの回答の添削:</strong></div>
+            <div id="diff-output" style="line-height: 1.8; font-size: 1.1rem; margin-bottom: 1rem;"></div>
 
             <div class="full-answer-box">
-                正解文:<br>
+                <strong>正解文:</strong><br>
                 <span id="correct-text" style="color:#333; font-weight:bold; font-size:1.1rem;"></span>
             </div>
         </div>
@@ -247,12 +77,12 @@
     // 全50問のデータ
     const allQuestions = [
         { ja: "誰もがスポーツを楽しむわけではない。", en: "Not everyone enjoys sport." },
-        { ja: "結婚した3組のカップルのうち1組は離婚している。", en: "One out of every three married couples ends up getting divorced." }, // everyは括弧内でしたが標準として含めました
+        { ja: "結婚した3組のカップルのうち1組は離婚している。", en: "One out of every three married couples ends up getting divorced." },
         { ja: "その200人のうち3人が救助された。", en: "Three out of the two hundred people were rescued." },
         { ja: "都市では人口の約10%の人が花粉症に悩まされている。", en: "In cities, about ten percent of the population suffers from hay fever." },
         { ja: "働く女性の割合は80%を超えている。", en: "The percentage of women who work are more than 80 percent." },
         { ja: "この国のお年寄りの比率は高い。", en: "The proportion of elderly people in this country is high." },
-        { ja: "この病院の看護職員と医師の割合は3対1だ。", en: "The ratio of nursing staff to doctors in this hospital is 3:1." }, // 誤字「砥石」を修正
+        { ja: "この病院の看護職員と医師の割合は3対1だ。", en: "The ratio of nursing staff to doctors in this hospital is 3:1." },
         { ja: "この国での幼児死亡率はかなり高い。", en: "The infant mortality rate in this country is quite high." },
         { ja: "核兵器に反対してデモ行進した人は何百人もいた。", en: "Hundreds of people marched in protest against nuclear weapons." },
         { ja: "300人の学生がその大学への入学を許可された。", en: "Three hundred students were admitted to the university." },
@@ -303,7 +133,7 @@
     let score = 0;
     let isChecked = false;
 
-    // DOM要素
+    // DOM要素の取得
     const setupScreen = document.getElementById('setup-screen');
     const gameScreen = document.getElementById('game-screen');
     const endScreen = document.getElementById('end-screen');
@@ -318,7 +148,7 @@
     const diffOutput = document.getElementById('diff-output');
     const correctText = document.getElementById('correct-text');
 
-    // メニューの切り替え表示
+    // メニュー表示の切り替え
     function toggleMenu() {
         const mode = document.querySelector('input[name="order"]:checked').value;
         if (mode === 'seq') {
@@ -330,7 +160,7 @@
         }
     }
 
-    // ゲーム開始処理
+    // 学習開始処理
     function startGame() {
         const mode = document.querySelector('input[name="order"]:checked').value;
         
@@ -340,16 +170,16 @@
 
             if (rangeVal !== 'all') {
                 const parts = rangeVal.split('-');
-                start = parseInt(parts[0]); // 0-based indexに調整するため、表示1問目はindex0
-                if (start > 0) start = start; // 0, 10, 20... そのまま使える(1-10なら 0-10 slice)
+                start = parseInt(parts[0]);
+                if (start > 0) start = start; // 既に0始まりのように扱えるよう調整
                 end = parseInt(parts[1]);
             }
-            // sliceはendを含まない
+            // 範囲指定でスライス
             currentQuestions = allQuestions.slice(start, end);
 
         } else {
             const countVal = document.querySelector('input[name="count"]:checked').value;
-            // シャッフル
+            // 全問をシャッフルしてから指定数だけ取り出す
             const shuffled = [...allQuestions].sort(() => 0.5 - Math.random());
             
             if (countVal === 'all') {
@@ -364,10 +194,10 @@
             return;
         }
 
-        // 画面遷移
+        // 画面切り替え
         setupScreen.classList.add('hidden');
         gameScreen.classList.remove('hidden');
-        document.getElementById('app-title').style.display = 'none'; // タイトルを隠してスッキリさせる
+        document.getElementById('app-title').style.display = 'none';
 
         // 初期化
         currentIdx = 0;
@@ -375,10 +205,11 @@
         loadQuestion();
     }
 
-    // 正規化関数
+    // 文字列の正規化（判定用）
     const normalize = (str) => str.trim().replace(/[.,!]/g, '').toLowerCase().replace(/\s+/g, ' ');
     const splitWords = (str) => normalize(str).split(' ');
 
+    // 問題の読み込み
     function loadQuestion() {
         isChecked = false;
         resultDisplay.style.display = 'none';
@@ -394,8 +225,13 @@
         actionBtn.disabled = false;
     }
 
-    // 差分ハイライト生成 (LCS)
+    // 差分ハイライト生成 (LCSアルゴリズム)
     function generateDiffHtml(userStr, correctStr) {
+        // 空入力対策
+        if (!userStr.trim()) {
+            return splitWords(correctStr).map(w => `<span class="diff-added">${w}</span>`).join(' ');
+        }
+
         const userWords = splitWords(userStr);
         const correctWords = splitWords(correctStr);
 
@@ -418,12 +254,15 @@
 
         while (i > 0 || j > 0) {
             if (i > 0 && j > 0 && userWords[i - 1] === correctWords[j - 1]) {
+                // 一致
                 result.unshift(`<span class="diff-common">${correctWords[j - 1]}</span>`);
                 i--; j--;
             } else if (j > 0 && (i === 0 || dp[i][j - 1] >= dp[i - 1][j])) {
+                // 不足している単語 (Added)
                 result.unshift(`<span class="diff-added">${correctWords[j - 1]}</span>`);
                 j--;
             } else if (i > 0 && (j === 0 || dp[i][j - 1] < dp[i - 1][j])) {
+                // 余計な単語 (Removed)
                 result.unshift(`<span class="diff-removed">${userWords[i - 1]}</span>`);
                 i--;
             }
@@ -431,6 +270,7 @@
         return result.join(' ');
     }
 
+    // 回答チェック
     function checkAnswer() {
         if (isChecked) return;
 
@@ -441,9 +281,9 @@
         const correctNorm = normalize(correctSentence);
         const isCorrect = userNorm === correctNorm;
 
+        // 結果表示
         resultDisplay.style.display = 'block';
-        resultDisplay.classList.add('fade-in');
-
+        
         const diffHtml = generateDiffHtml(userInput, correctSentence);
         diffOutput.innerHTML = diffHtml;
         correctText.textContent = correctSentence;
@@ -480,6 +320,7 @@
         document.getElementById('total-display').textContent = currentQuestions.length;
     }
 
+    // Enterキー操作のイベントリスナー
     inputEl.addEventListener('keypress', function (e) {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
@@ -493,7 +334,7 @@
         }
     });
 
-    // 初期ロード時にメニュー状態セット
+    // 初期メニュー状態の設定
     toggleMenu();
 
 </script>
