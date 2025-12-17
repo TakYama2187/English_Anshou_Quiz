@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>英作文マスター50選</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            color: #333;
+        }
+        .container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 95%;
+            max-width: 700px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #2c3e50;
+        }
+        
+        /* 設定メニューのスタイル */
+        .menu-section {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 1.5rem;
+            text-align: left;
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid #eee;
+        }
+        .menu-group {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 15px;
+        }
+        .menu-group:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        .menu-label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        .radio-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .radio-options label {
+            cursor: pointer;
+            background: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            border: 1px solid #ddd;
+            transition: all 0.2s;
+        }
+        .radio-options label:hover {
+            background: #e9ecef;
+        }
+        .radio-options input:checked + span {
+            font-weight: bold;
+            color: #3498db;
+        }
+
+        /* ゲーム画面のスタイル */
+        .progress {
+            margin-bottom: 1rem;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        .japanese-text {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background-color: #e8f4f8;
+            border-radius: 8px;
+            color: #2980b9;
+            line-height: 1.4;
+        }
+        textarea {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.1rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            resize: vertical;
+            min-height: 80px;
+            font-family: inherit;
+            margin-bottom: 1rem;
+        }
+        textarea:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            min-width: 120px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        button:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+
+        /* 結果表示エリア */
+        .result-area {
+            margin-top: 1.5rem;
+            text-align: left;
+            padding: 1.5rem;
+            border-radius: 8px;
+            display: none;
+            background-color: #fafafa;
+            border: 1px solid #eee;
+        }
+        .result-title {
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .result-title.correct { color: #27ae60; }
+        .result-title.wrong { color: #c0392b; }
+
+        .diff-removed {
+            background-color: #f8d7da;
+            color: #721c24;
+            text-decoration: line-through;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        .diff-added {
+            background-color: #d4edda;
+            color: #155724;
+            font-weight: bold;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        .diff-common { color: #333; }
+        
+        .full-answer-box {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #666;
+            border-top: 1px solid #ddd;
+            padding-top: 0.5rem;
+        }
+
+        .hidden { display: none; }
+        .fade-in { animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 id="app-title">英作文マスター</h1>
+
+    <div id="setup-screen">
+        <div class="menu-section">
+            <div class="menu-group">
+                <span class="menu-label">1. 出題順を選択:</span>
+                <div class="radio-options">
+                    <label><input type="radio" name="order" value="seq" checked onchange="toggleMenu()"> <span>順番通り (Sequential)</span></label>
+                    <label><input type="radio" name="order" value="rand" onchange="toggleMenu()"> <span>ランダム (Random)</span></label>
+                </div>
+            </div>
+
+            <div id="seq-options" class="menu-group">
+                <span class="menu-label">2. 範囲を選択:</span>
+                <div class="radio-options">
+                    <label><input type="radio" name="range" value="0-10" checked> <span>1-10問目</span></label>
+                    <label><input type="radio" name="range" value="10-20"> <span>11-20問目</span></label>
+                    <label><input type="radio" name="range" value="20-30"> <span>21-30問目</span></label>
+                    <label><input type="radio" name="range" value="30-40"> <span>31-40問目</span></label>
+                    <label><input type="radio" name="range" value="40-50"> <span>41-50問目</span></label>
+                    <label><input type="radio" name="range" value="all"> <span>全50問</span></label>
+                </div>
+            </div>
+
+            <div id="rand-options" class="menu-group hidden">
+                <span class="menu-label">2. 出題数を選択:</span>
+                <div class="radio-options">
+                    <label><input type="radio" name="count" value="5"> <span>5問</span></label>
+                    <label><input type="radio" name="count" value="10" checked> <span>10問</span></label>
+                    <label><input type="radio" name="count" value="20"> <span>20問</span></label>
+                    <label><input type="radio" name="count" value="all"> <span>全問</span></label>
+                </div>
+            </div>
+        </div>
+        <button onclick="startGame()">学習を開始する</button>
+    </div>
+
+    <div id="game-screen" class="hidden">
+        <div class="progress" id="progress"></div>
+        <div class="japanese-text" id="question-text"></div>
+        <textarea id="user-input" placeholder="英文を入力してください..."></textarea>
+        <br>
+        <button id="action-btn" onclick="checkAnswer()">回答する</button>
+
+        <div id="result-display" class="result-area">
+            <div id="result-title" class="result-title"></div>
+            
+            <div style="margin-bottom: 5px;"><strong>あなたの回答の添削:</strong></div>
+            <div id="diff-output" style="line-height: 1.8; font-size: 1.1rem;"></div>
+
+            <div class="full-answer-box">
+                正解文:<br>
+                <span id="correct-text" style="color:#333; font-weight:bold; font-size:1.1rem;"></span>
+            </div>
+        </div>
+    </div>
+
+    <div id="end-screen" class="hidden">
+        <h2>全てのトレーニングが終了しました！</h2>
+        <p style="font-size: 1.2rem;">正解数: <span id="score-display" style="font-weight:bold; color:#e74c3c;"></span> / <span id="total-display"></span></p>
+        <button onclick="location.reload()">設定に戻る</button>
+    </div>
+</div>
+
+<script>
+    // 全50問のデータ
+    const allQuestions = [
+        { ja: "誰もがスポーツを楽しむわけではない。", en: "Not everyone enjoys sport." },
+        { ja: "結婚した3組のカップルのうち1組は離婚している。", en: "One out of every three married couples ends up getting divorced." }, // everyは括弧内でしたが標準として含めました
+        { ja: "その200人のうち3人が救助された。", en: "Three out of the two hundred people were rescued." },
+        { ja: "都市では人口の約10%の人が花粉症に悩まされている。", en: "In cities, about ten percent of the population suffers from hay fever." },
+        { ja: "働く女性の割合は80%を超えている。", en: "The percentage of women who work are more than 80 percent." },
+        { ja: "この国のお年寄りの比率は高い。", en: "The proportion of elderly people in this country is high." },
+        { ja: "この病院の看護職員と医師の割合は3対1だ。", en: "The ratio of nursing staff to doctors in this hospital is 3:1." }, // 誤字「砥石」を修正
+        { ja: "この国での幼児死亡率はかなり高い。", en: "The infant mortality rate in this country is quite high." },
+        { ja: "核兵器に反対してデモ行進した人は何百人もいた。", en: "Hundreds of people marched in protest against nuclear weapons." },
+        { ja: "300人の学生がその大学への入学を許可された。", en: "Three hundred students were admitted to the university." },
+        { ja: "コンピュータは日常生活に不可欠な道具だ。", en: "Computers are an indispensable tool of our daily lives." },
+        { ja: "言語は素晴らしい伝達手段である。", en: "Language is a wonderful means of communication." },
+        { ja: "イギリス人と話す機会が多い。", en: "I have many chances to talk with British people." },
+        { ja: "彼の髪は長い。", en: "He has long hair." },
+        { ja: "彼女は幸せそうだ。", en: "She looks happy." },
+        { ja: "打ち込めるものがあれば幸せだ。", en: "You are happy if you have something you can devote yourself to." },
+        { ja: "私は音楽鑑賞が好きです。", en: "I love listening to music." },
+        { ja: "ペットの糞を放置していく人がいるのは残念だ。", en: "It is a pity that some people leave pet poop behind." },
+        { ja: "男性が育児休暇を取るのは珍しくない。", en: "It is not unusual for men to take childcare leave." },
+        { ja: "リサは2年前ドイツに行ったことがある。", en: "Lisa went to Germany two years ago." },
+        { ja: "子供のころ、3年間中国に住んでいた。", en: "I lived in China for three years when I was a child." },
+        { ja: "私は来年ドイツに行くことに決めた。", en: "I have decided to go to Germany next year." },
+        { ja: "リサは今までに3度ドイツに行ったことがある。", en: "Lisa has been to Germany three times." },
+        { ja: "大学教育の目的の1つは、自分自身で物を考えることのできる人間をつくり出すことだ。", en: "One of the aims of a college education is to create people who can think for themselves." },
+        { ja: "休みの時の私の楽しみの1つは近くの川で魚釣りをすることだ。", en: "One of my pleasures on holidays is fishing in the nearby river." },
+        { ja: "人生の本質は情熱を追い求めることにある。", en: "Life's true essence lies in pursuing your passions." },
+        { ja: "君の問題点は人の話を聞かないことだ。", en: "The trouble with you is that you do not listen to other people." },
+        { ja: "そのお祭りが計画通り行われるかどうかは不確かだ。", en: "It is unclear whether or not the festival will take place as planned." },
+        { ja: "期日通りに十分なデータを集められるかどうかは疑わしい。", en: "It is doubtful whether or not enough data will be collected on time." },
+        { ja: "彼は十分睡眠をとることが重要だ。", en: "It is important that he get enough sleep." },
+        { ja: "彼が成功しようがしまいが重要ではない。", en: "It does not matter whether he succeeds or not." },
+        { ja: "私は間違った方向に歩いていることに突然気付いた。", en: "I suddenly realized that I was walking in the wrong direction." },
+        { ja: "トムはカナダに2年間住んだことがあると言っていた。", en: "Tom told me that he had lived in Canada for two years." },
+        { ja: "僕の発言が彼女を喜ばせるなんて考えもしなかった。", en: "It never occurred to me that my remark might please her." },
+        { ja: "過去10年間に物価は50%上昇した。", en: "Commodity prices have gone up by fifty percent in the last ten years." },
+        { ja: "私は京都の郊外に10年間住んでいる。", en: "I have lived in the suburbs of Kyoto for ten years." },
+        { ja: "このフランス製の自転車に10年以上も乗っているんだ。", en: "I have been riding this French bicycle for more than ten years." },
+        { ja: "昨日昔から欲しかった本を買うことができた。", en: "Yesterday I bought the book I had wanted for a long time." },
+        { ja: "君が薦めてくれた本を昨日買うことは出来なかった。", en: "Yesterday I could not buy the book you had recommended." },
+        { ja: "昨日、Ruthはお金をおろしに銀行に行った。", en: "Yesterday, Ruth went to the bank to withdraw some money." },
+        { ja: "時間内に準備が万事完了するように頑張った。", en: "I worked hard so that everything would be ready in time." },
+        { ja: "途中でおなかがすくといけないから、昼ご飯を食べていきなさい。", en: "You should eat lunch so that you will not get hungry on the way." },
+        { ja: "途中でおなかがすくといけないから、サンドイッチを持っていきなさい。", en: "You should take sandwiches with you in case you get hungry on the way." },
+        { ja: "私は犬が好きだ。飼い主に従順だからだ。", en: "I like dogs, because they are obedient to their owners." },
+        { ja: "その日彼女は働けないのだから、誰かほかの人に頼まなければならない。", en: "Since she is unable to work on that day, we have to ask someone else." },
+        { ja: "今や彼はスペイン語が話せるので、大使館に就職した。", en: "Now that he can speak Spanish, he has got a job at the embassy." },
+        { ja: "祖父は歳のため早起きだ。", en: "My grandfather gets up early because of his age." },
+        { ja: "私が毎朝散歩している理由の1つは、考える時間ができるということだ。", en: "I take a walk every morning partly because it gives me time to think." },
+        { ja: "私がこの部屋を選んだ主な理由は、家賃が手ごろであるということだ。", en: "I have chosen this room mainly because its rent is reasonable." },
+        { ja: "私たちの上司が尊敬されているのは、まさに私たちへの指示が的確だからです。", en: "Our boss is respected precisely because he gives us the right instructions." }
+    ];
+
+    let currentQuestions = [];
+    let currentIdx = 0;
+    let score = 0;
+    let isChecked = false;
+
+    // DOM要素
+    const setupScreen = document.getElementById('setup-screen');
+    const gameScreen = document.getElementById('game-screen');
+    const endScreen = document.getElementById('end-screen');
+    const seqOptions = document.getElementById('seq-options');
+    const randOptions = document.getElementById('rand-options');
+    const progressEl = document.getElementById('progress');
+    const questionEl = document.getElementById('question-text');
+    const inputEl = document.getElementById('user-input');
+    const actionBtn = document.getElementById('action-btn');
+    const resultDisplay = document.getElementById('result-display');
+    const resultTitle = document.getElementById('result-title');
+    const diffOutput = document.getElementById('diff-output');
+    const correctText = document.getElementById('correct-text');
+
+    // メニューの切り替え表示
+    function toggleMenu() {
+        const mode = document.querySelector('input[name="order"]:checked').value;
+        if (mode === 'seq') {
+            seqOptions.classList.remove('hidden');
+            randOptions.classList.add('hidden');
+        } else {
+            seqOptions.classList.add('hidden');
+            randOptions.classList.remove('hidden');
+        }
+    }
+
+    // ゲーム開始処理
+    function startGame() {
+        const mode = document.querySelector('input[name="order"]:checked').value;
+        
+        if (mode === 'seq') {
+            const rangeVal = document.querySelector('input[name="range"]:checked').value;
+            let start = 0, end = 50;
+
+            if (rangeVal !== 'all') {
+                const parts = rangeVal.split('-');
+                start = parseInt(parts[0]); // 0-based indexに調整するため、表示1問目はindex0
+                if (start > 0) start = start; // 0, 10, 20... そのまま使える(1-10なら 0-10 slice)
+                end = parseInt(parts[1]);
+            }
+            // sliceはendを含まない
+            currentQuestions = allQuestions.slice(start, end);
+
+        } else {
+            const countVal = document.querySelector('input[name="count"]:checked').value;
+            // シャッフル
+            const shuffled = [...allQuestions].sort(() => 0.5 - Math.random());
+            
+            if (countVal === 'all') {
+                currentQuestions = shuffled;
+            } else {
+                currentQuestions = shuffled.slice(0, parseInt(countVal));
+            }
+        }
+
+        if (currentQuestions.length === 0) {
+            alert("問題の読み込みに失敗しました。");
+            return;
+        }
+
+        // 画面遷移
+        setupScreen.classList.add('hidden');
+        gameScreen.classList.remove('hidden');
+        document.getElementById('app-title').style.display = 'none'; // タイトルを隠してスッキリさせる
+
+        // 初期化
+        currentIdx = 0;
+        score = 0;
+        loadQuestion();
+    }
+
+    // 正規化関数
+    const normalize = (str) => str.trim().replace(/[.,!]/g, '').toLowerCase().replace(/\s+/g, ' ');
+    const splitWords = (str) => normalize(str).split(' ');
+
+    function loadQuestion() {
+        isChecked = false;
+        resultDisplay.style.display = 'none';
+        
+        progressEl.textContent = `Question ${currentIdx + 1} / ${currentQuestions.length}`;
+        questionEl.textContent = currentQuestions[currentIdx].ja;
+        
+        inputEl.value = '';
+        inputEl.focus();
+        
+        actionBtn.textContent = '回答する';
+        actionBtn.onclick = checkAnswer;
+        actionBtn.disabled = false;
+    }
+
+    // 差分ハイライト生成 (LCS)
+    function generateDiffHtml(userStr, correctStr) {
+        const userWords = splitWords(userStr);
+        const correctWords = splitWords(correctStr);
+
+        const m = userWords.length;
+        const n = correctWords.length;
+        const dp = Array.from({ length: m + 1 }, () => Array(n + 1).fill(0));
+
+        for (let i = 1; i <= m; i++) {
+            for (let j = 1; j <= n; j++) {
+                if (userWords[i - 1] === correctWords[j - 1]) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                } else {
+                    dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+                }
+            }
+        }
+
+        let i = m, j = n;
+        const result = [];
+
+        while (i > 0 || j > 0) {
+            if (i > 0 && j > 0 && userWords[i - 1] === correctWords[j - 1]) {
+                result.unshift(`<span class="diff-common">${correctWords[j - 1]}</span>`);
+                i--; j--;
+            } else if (j > 0 && (i === 0 || dp[i][j - 1] >= dp[i - 1][j])) {
+                result.unshift(`<span class="diff-added">${correctWords[j - 1]}</span>`);
+                j--;
+            } else if (i > 0 && (j === 0 || dp[i][j - 1] < dp[i - 1][j])) {
+                result.unshift(`<span class="diff-removed">${userWords[i - 1]}</span>`);
+                i--;
+            }
+        }
+        return result.join(' ');
+    }
+
+    function checkAnswer() {
+        if (isChecked) return;
+
+        const userInput = inputEl.value;
+        const correctSentence = currentQuestions[currentIdx].en;
+        
+        const userNorm = normalize(userInput);
+        const correctNorm = normalize(correctSentence);
+        const isCorrect = userNorm === correctNorm;
+
+        resultDisplay.style.display = 'block';
+        resultDisplay.classList.add('fade-in');
+
+        const diffHtml = generateDiffHtml(userInput, correctSentence);
+        diffOutput.innerHTML = diffHtml;
+        correctText.textContent = correctSentence;
+
+        if (isCorrect) {
+            resultTitle.textContent = "Correct! (正解)";
+            resultTitle.className = "result-title correct";
+            score++;
+        } else {
+            resultTitle.textContent = "Incorrect (不正解)";
+            resultTitle.className = "result-title wrong";
+        }
+
+        isChecked = true;
+        
+        if (currentIdx < currentQuestions.length - 1) {
+            actionBtn.textContent = '次の問題へ';
+            actionBtn.onclick = nextQuestion;
+        } else {
+            actionBtn.textContent = '結果を見る';
+            actionBtn.onclick = showResult;
+        }
+    }
+
+    function nextQuestion() {
+        currentIdx++;
+        loadQuestion();
+    }
+
+    function showResult() {
+        gameScreen.classList.add('hidden');
+        endScreen.classList.remove('hidden');
+        document.getElementById('score-display').textContent = score;
+        document.getElementById('total-display').textContent = currentQuestions.length;
+    }
+
+    inputEl.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            if(!isChecked) {
+                checkAnswer();
+            } else if (currentIdx < currentQuestions.length - 1) {
+                nextQuestion();
+            } else {
+                showResult();
+            }
+        }
+    });
+
+    // 初期ロード時にメニュー状態セット
+    toggleMenu();
+
+</script>
+</body>
+</html>
